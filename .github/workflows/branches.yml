@@ -1,0 +1,28 @@
+name: Enforce Branch Naming Conventions
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  enforce-branch-naming:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Validate branch name
+        id: validate-branch-name
+        uses: peter-evans/commit-message-validator@v1.1.0
+        with:
+          regex: '^(feature|hotfix|bugfix)/[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*$'
+          message: 'Please use the following branch naming convention: feature/description or hotfix/description or bugfix/description'
+
+      - name: Fail workflow if branch name is invalid
+        if: steps.validate-branch-name.outputs.status != '0'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            core.set-failure('Invalid branch name')
