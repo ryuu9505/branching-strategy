@@ -1,17 +1,19 @@
-name: Check Branch Name
+name: Check PR Branch Name
 
 on:
-  push:
-    branches:
-      - '*'
+  pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
-  check-branch-name:
+  check-pr-branch-name:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
       - name: Check branch name
         run: |
-          if [[ "${GITHUB_REF#refs/heads/}" != feat/* ]]; then
+          if [[ "${GITHUB_HEAD_REF}" != feat/* ]]; then
             echo "Branch name does not follow the 'feat/...' convention"
             exit 1
           fi
