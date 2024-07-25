@@ -15,3 +15,4 @@ jobs:
             echo "Branch name does not follow the 'feat/...' convention"
             exit 1
           fi
+# error
