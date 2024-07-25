@@ -1,27 +1,29 @@
-name: Branch Name Convention
+name: Enforce Branch Naming Conventions
 
 on:
   push:
-    branches:
-      - '*'
+    branches: [ main ]
   pull_request:
-    branches:
-      - '*'
+    branches: [ main ]
 
 jobs:
-  check-branch-name:
+  enforce-branch-naming:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out the repository
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Validate branch name
-        run: |
-          BRANCH_NAME=$(echo ${GITHUB_REF#refs/heads/})
-          if [[ "$BRANCH_NAME" == "main" || "$BRANCH_NAME" =~ ^feature\/.* || "$BRANCH_NAME" =~ ^bugfix\/.* || "$BRANCH_NAME" =~ ^release\/.* || "$BRANCH_NAME" =~ ^hotfix\/.* ]]; then
-            echo "Branch name is valid: $BRANCH_NAME"
-          else
-            echo "Invalid branch name: $BRANCH_NAME"
-            exit 1
-          fi
+        id: validate-branch-name
+        uses: actions/toolkit@v3
+        with:
+          commands: |
+            branch_name=$(git branch --show-current)
+            if ! [[ $branch_name =~ ^(feat|hotfix|bugfix)/[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*$ ]]; then
+              echo "Invalid branch name: $branch_name"
+              exit 1
+            fi
+
+      - name: Fail workflow if branch name is invalid
+        if: steps.validate-branch-name.outcome != 'success'
+        run: exit 1
