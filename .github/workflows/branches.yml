@@ -27,3 +27,4 @@ jobs:
       - name: Fail workflow if branch name is invalid
         if: steps.validate-branch-name.outcome != 'success'
         run: exit 1
+# wrong
