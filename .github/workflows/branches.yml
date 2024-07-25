@@ -17,7 +17,7 @@ jobs:
         id: validate-branch-name
         uses: peter-evans/commit-message-validator@v1.1.0
         with:
-          regex: '^(feature|hotfix|bugfix)/[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*$'
+          regex: '^(feat|hotfix|bugfix)/[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*$'
           message: 'Please use the following branch naming convention: feature/description or hotfix/description or bugfix/description'
 
       - name: Fail workflow if branch name is invalid
