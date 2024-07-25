@@ -19,7 +19,7 @@ jobs:
         with:
           commands: |
             branch_name=$(git branch --show-current)
-            if ! [[ $branch_name =~ ^(feature|hotfix|bugfix)/[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*$ ]]; then
+            if ! [[ $branch_name =~ ^(feat|hotfix|bugfix)/[A-Za-z0-9_-]+(/[A-Za-z0-9_-]+)*$ ]]; then
               echo "Invalid branch name: $branch_name"
               exit 1
             fi
