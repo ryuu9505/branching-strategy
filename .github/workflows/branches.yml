@@ -25,4 +25,4 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            core.set-failure('Invalid branch name')
+            core.set-failure('Invalid branch name')\
